@@ -13,78 +13,78 @@
         
         let table = $('table tbody') 
         let idCount = 0
-        const nameErrMsg = () => {
-            alert('값이 없거나 5글자 이상입니다. 이름은 5글자 이하여야 합니다.')
-            $('input[name=laborerName]').val(null)
+  
+        const errMsg = error => {
+            if(error == 'name') $('.modal-body p').text('노동자의 이름을 입력하세요.')
+            else if (error == 'date') $('.modal-body p').text('노동자의 입사일을 yyyy-mm-dd 형식으로 입력하세요.')
+            else if (error == 'empty') $('.modal-body p').text('노동자가 목록에 없습니다.')
+            else if (error == 'notSelect') $('.modal-body p').text('노동자를 선택하지 않았습니다.')
+            $('.modal-footer').children().remove()
+            $('.modal-footer').append($(`<button type="button" class="btn btn-info" data-dismiss="modal">확인</button>`))    
+            $('nav button').attr({ 'data-target': '#laborerMsgModal', 'data-toggle': 'modal'})
+            
+            clearValue()
+            tableEmptyMsg()
         }
 
-        const dateErrMsg = () => {
-            alert('값이 없거나 없는 날짜입니다. 날짜 형식은 yyyy-mm-dd입니다.')
-            $('input[name=hireDate]').val(null)
+        const deleteMsg = () => {
+            $('.modal-body p').text('노동자를 삭제하시겠습니까?')
+            $('.modal-footer').children().remove()
+            $('.modal-footer').append($('<button type="button" class="btn btn-secondary" data-dismiss="modal">아니오</button>'))
+            $('.modal-footer').append($('<button type="button" class="btn btn-primary" data-dismiss="modal">예</button>'))
         }
 
-        const tableCheck = () => {
-            if($("td[name=empty]").length) table.children(0).remove()
-        }
+        const clearValue = () => { $('input').val(null) }
 
-        const emptyMsg = () => {
+        const tableEmptyMsg = () => {
             if(!table.children().length)
-                table.append($('<tr><td class="text-center" colspan="4" name="empty">노동자가 없습니다.</td></tr>')) 
+                table.append($('<tr><td class="text-center" colspan="4" id="emptyLaborer">노동자가 없습니다.</td></tr>')) 
         }
         
-        emptyMsg()
+        tableEmptyMsg()
         
-        $('button[name=addLaborer]').click(() => {    
-            tableCheck()            
-            if(!$('input[name=laborerName]').val() || $('input[name=laborerName]').val().length > 5)
-                nameErrMsg()
-            else if($('input[name=hireDate]').val().length != 10)
-                dateErrMsg()            
-            else {         
-                table.append($(`<tr><td><input type="radio" name="idRadio"/></td><td>${idCount + 1}</td><td>${$("input[name=laborerName]").val()}</td><td>${$("input[name=hireDate]").val()}</td></tr>`))
-                idCount++
-                alert('노동자를 추가했습니다.')
-                $('input').val(null)
+        $('button[id=addLaborer]').click(() => {
+            if($("td[id=emptyLaborer]").length) table.children(0).remove()
+         
+            if(!$('input[id=laborerName]').val())   errMsg('name')
+            else if(!$('input[id=hireDate]').val())   errMsg('date')            
+            else {                
+                $('nav button[id="addLaborer"]').removeAttr('data-target', 'data-toggle')
+                $(`<tr><td><input type="radio" id="idRadio"/></td>
+                    <td>${idCount + 1}</td><td>${$("input[id=laborerName]").val()}</td>
+                    <td>${$("input[id=hireDate]").val()}</td></tr>`).prependTo(table)
+                idCount++                
+                clearValue()
             }      
         })
 
-        $('button[name=updateLaborer]').click(() => {
-            if($('input:radio[name=idRadio]').val() == undefined)
-                alert('수정할 노동자가 없습니다.')            
-            else if(!$('input:radio[name=idRadio]').is(':checked'))
-                alert('수정할 노동자를 선택하지 않았습니다.')
+        $('button[id=updateLaborer]').click(() => {
+            if($('input:radio[id=idRadio]').val() == undefined)   errMsg('empty')            
+            else if(!$('input:radio[id=idRadio]').is(':checked'))   errMsg('notSelect')
             else {
-                if(!$('input[name=laborerName]').val() || $('input[name=laborerName]').val().length > 5)
-                    nameErrMsg()
-                else if($('input[name=hireDate]').val().length != 10)
-                    dateErrMsg()
-                else {          
-                    tmp = $('input:radio[name=idRadio]:checked').parent().siblings()          
-                    tmp.eq(1).text($('input[name=laborerName]').val())
-                    tmp.eq(2).text($('input[name=hireDate]').val())
-                    alert('노동자를 수정했습니다.')
-                    $('input').val(null)
-                    $('input:radio[name=idRadio]').prop('checked',false)
+                if(!$('input[id=laborerName]').val())   errMsg('name')
+                else if(!$('input[id=hireDate]').val())   errMsg('date')
+                else { 
+                    $('nav button[id="updateLaborer"]').removeAttr('data-target', 'data-toggle')         
+                    target = $('input:radio[id=idRadio]:checked').parent().siblings()          
+                    target.eq(1).text($('input[id=laborerName]').val())
+                    target.eq(2).text($('input[id=hireDate]').val())
+                    clearValue()
+                    $('input:radio[id=idRadio]').prop('checked',false)
                 }
             }      
         })
 
-        $('button[name=delLaborer]').click(() => {
-            if($('input:radio[name=idRadio]').val() == undefined)
-                alert('삭제할 노동자가 없습니다.')
-            else if(!$('input:radio[name=idRadio]').is(':checked'))                
-                alert('삭제할 노동자를 선택하지 않았습니다.')
+        $('button[id=delLaborer]').click(() => {
+            if($('input:radio[id=idRadio]').val() == undefined)   errMsg('empty')
+            else if(!$('input:radio[id=idRadio]').is(':checked'))   errMsg('notSelect')
             else {
-                $('button[name=delLaborer]').attr('data-target','#delLaborerModal')
-                $('button').filter('.btn-primary').click(() => {
-                    $('button').filter('.btn-primary').attr('data-dismiss','modal')
-                    $('input:radio[name=idRadio]:checked').parent().parent().remove()
-                    alert('노동자를 삭제했습니다.')
-                    $('button[name=delLaborer]').attr('data-target','') 
-                    emptyMsg()                                 
-               })             
+                deleteMsg()
+                $('button.btn-primary').click(() => { 
+                    $('input:radio[id=idRadio]:checked').parent().parent().remove()
+                    tableEmptyMsg()                             
+                })             
             }
-            $('button').filter('.btn-primary').removeAttr('data-dismiss') 
         })        
     })
 </script>
@@ -96,7 +96,6 @@
         <div class='col'>
             <header class='jumbotron p-2'>
                 <h1 class='text-center'>HR</h1>
-                <h2 class='text-center'></h2>
             </header>
             
         </div>
@@ -106,21 +105,23 @@
             <form>
                 <div class='row mb-3'>
                     <div class='col-2'>
-                        <input name='laborerName' type='text' class='form-control' placeholder='노동자명'/>
+                        <input id='laborerName' type='text' class='form-control' placeholder='노동자명'/>
                     </div>
                     <div class='col-4'>
-                        <input name='hireDate'type='date' class='form-control'/>
+                        <input id='hireDate'type='date' class='form-control'/>
                     </div>
                     <div class='col'>
                         <nav class='d-flex'>
-                            <button type='button' class='btn btn-success flex-fill mr-1' name='addLaborer'>
+                            <button type='button' class='btn btn-success flex-fill mr-1'
+                                data-toggle='modal' data-target='#laborerMsgModal' id='addLaborer'>
                                 <i class='fas fa-plus'></i><span class='label d-none d-sm-inline'>추가</span>
                             </button>
-                            <button type='button' class='btn btn-info flex-fill mr-1' name='updateLaborer'>
+                            <button type='button' class='btn btn-info flex-fill mr-1'
+                                data-toggle='modal' data-target='#laborerMsgModal' id='updateLaborer'>
                                 <i class='fas fa-edit'></i><span class='label d-none d-sm-inline'>수정</span>
                             </button>
                             <button type='button' class='btn btn-warning flex-fill'
-                                data-toggle='modal' data-target='' name='delLaborer'>
+                                data-toggle='modal' data-target='#laborerMsgModal' id='delLaborer'>
                                 <i class='fas fa-trash-alt'></i><span class='label d-none d-sm-inline'>삭제</span>
                             </button>
                         </nav>
@@ -140,7 +141,7 @@
     </div>
 </div>
 
-<div class='modal fade' tabindex='-1' id='delLaborerModal'>
+<div class='modal fade' tabindex='-1' id='laborerMsgModal'>
     <div class='modal-dialog'>
         <div class='modal-content'>
             <div class='modal-header'>
