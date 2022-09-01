@@ -59,29 +59,29 @@
         })
 
         $('button[id=updateLaborer]').click(() => {
-            if($('input:radio[id=idRadio]').val() == undefined)   errMsg('empty')            
-            else if(!$('input:radio[id=idRadio]').is(':checked'))   errMsg('notSelect')
+            if($('input[id=idRadio]').val() == undefined)   errMsg('empty')            
+            else if(!$('input[id=idRadio]').is(':checked'))   errMsg('notSelect')
             else {
                 if(!$('input[id=laborerName]').val())   errMsg('name')
                 else if(!$('input[id=hireDate]').val())   errMsg('date')
                 else { 
                     $('nav button[id="updateLaborer"]').removeAttr('data-target', 'data-toggle')         
-                    target = $('input:radio[id=idRadio]:checked').parent().siblings()          
+                    target = $('input[id=idRadio]:checked').parent().siblings()          
                     target.eq(1).text($('input[id=laborerName]').val())
                     target.eq(2).text($('input[id=hireDate]').val())
                     clearValue()
-                    $('input:radio[id=idRadio]').prop('checked',false)
+                    $('input[id=idRadio]').prop('checked',false)
                 }
             }      
         })
 
         $('button[id=delLaborer]').click(() => {
-            if($('input:radio[id=idRadio]').val() == undefined)   errMsg('empty')
-            else if(!$('input:radio[id=idRadio]').is(':checked'))   errMsg('notSelect')
+            if($('input[id=idRadio]').val() == undefined)   errMsg('empty')
+            else if(!$('input[id=idRadio]').is(':checked'))   errMsg('notSelect')
             else {
                 deleteMsg()
                 $('button.btn-primary').click(() => { 
-                    $('input:radio[id=idRadio]:checked').parent().parent().remove()
+                    $('input[id=idRadio]:checked').parent().parent().remove()
                     tableEmptyMsg()                             
                 })             
             }
