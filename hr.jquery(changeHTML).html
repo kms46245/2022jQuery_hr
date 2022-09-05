@@ -1,0 +1,86 @@
+<head>
+<title></title>
+<meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script src='https://code.jquery.com/jquery-3.6.0.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js'></script>
+    <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js'></script>
+    <link rel='stylesheet' href='http://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'/>
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.6.3/css/all.css'/>
+    <script>
+    
+    </script>
+    <style>
+    
+    </style>
+    
+    </head>
+        <!-- html의 수정사항까지의 hr.jquery이다.-->
+    
+    <body>
+    <div class='container'>
+        <div class='row'>
+            <div class='col'>
+                <header class='jumbotron p-2'>
+                    <h1 class='text-center'>HR</h1>
+                </header>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col'>
+                <form>
+                    <div class='row mb-3'>
+                        <div class='col-2'>
+                            <input type='text' class='form-control' placeholder='노동자명' id='laborerName'/>
+                        </div>
+                        <div class='col-4'>
+                            <input type='date' class='form-control' placeholder='입사일' id='hireDate'/>
+                        </div>
+                        <div class='col'>
+                            <nav class='d-flex'>
+                                <button type='button' class='btn btn-success flex-fill mr-1' id='addLaborerBtn'>
+                                    <i class='fas fa-plus'></i><span class='label d-none d-sm-inline'>추가</span>
+                                </button>
+                                <button type='button' class='btn btn-info flex-fill mr-1' id='fixLaborerBtn'>
+                                    <i class='fas fa-edit'></i><span class='label d-none d-sm-inline'>수정</span>
+                                </button>
+                                <button type='button' class='btn btn-warning flex-fill' id='delLaborerBtn'>
+                                    <i class='fas fa-trash-alt'></i><span class='label d-none d-sm-inline'>삭제</span>
+                                </button>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='col'>
+                            <table class='table'>
+                                <thead><tr><th></th><th>ID</th><th>이름</th><th>입사일</th></tr></thead>
+                                <tbody id='laborers'>
+                                    <tr><td colspan='4' class='text-center'>노동자가 없습니다.</td></tr>  
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class='modal fade' tabindex='-1' id='modal'>
+        <div class='modal-dialog'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <button type='button' class='close' data-dismiss='modal'>
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class='modal-body'>
+                    <p id='modalMsg'></p>
+                </div>
+                <div class='modal-footer' id='modalBtn'>
+                    <button type='button' class='btn btn-secondary' data-dismiss='modal'>아니오</button>
+                    <button type='button' class='btn btn-primary' id='delLaborer'>예</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <body>
